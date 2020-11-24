@@ -20,6 +20,18 @@ spec:
       - image: busybox
         command: ["tail", "-f", "/dev/null"]
         name: tasks
+        env:
+        - name: DB_HOST
+          value: mongo-mongodb-headless
+        - name: DB_NAME
+          value: db
+        - name: DB_USER
+          value: mongo
+        - name: DB_PASSWORD
+          valueFrom:
+              secretKeyRef:
+               name: mongo-mongodb
+               key: mongodb-password
         volumeMounts:
           - name: ca-clients
             mountPath: "/etc/ca-clients"
