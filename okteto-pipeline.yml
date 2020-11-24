@@ -1,0 +1,4 @@
+deploy:
+- helm repo add bitnami https://charts.bitnami.com/bitnami
+- helm upgrade --install mongo bitnami/mongodb --set architecture=replicaset,tls.enabled=true,auth.rootPassword=rootpasswd,auth.password=secretpassword,auth.username=mongo,auth.database=db
+- kubectl apply -f k8s.yaml

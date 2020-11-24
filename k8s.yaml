@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      volumes:
+        - name:  ca-clients
+          secret:
+            secretName: ca-clients
+      containers:
+      - image: busybox
+        command: ["tail", "-f", "/dev/null"]
+        name: tasks
+        volumeMounts:
+          - name: ca-clients
+            mountPath: "/etc/ca-clients"
+            readOnly: true
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasks
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP  
+  ports:
+  - name: "tasks"
+    port: 8080
+  selector:
+    app: tasks
