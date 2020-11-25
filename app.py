@@ -50,5 +50,6 @@ def resolve_task(task_id):
 
 
 if __name__ == '__main__':
+    # python -m debugpy --listen 5678 app.py 
     debug  = os.getenv('DEBUG') == "True"
     app.run(host='0.0.0.0', port='8080', debug=debug)
