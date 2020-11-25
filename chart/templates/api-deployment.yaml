@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api
   labels:
-    {{- include "movies.labels" . | nindent 4 }}
+    {{- include "tasks.labels" . | nindent 4 }}
     app.kubernetes.io/component: api
 spec:
   replicas: {{ .Values.api.replicaCount }}
@@ -51,3 +51,7 @@ spec:
             - name: ca-clients
               mountPath: "/etc/ca-clients"
               readOnly: true
+      volumes:
+        - name:  ca-clients
+          secret:
+            secretName: ca-clients
