@@ -5,10 +5,9 @@ metadata:
   labels:
     {{- include "tasks.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 8080
-      targetPort: 8080
       protocol: TCP
       name: http
   selector:
