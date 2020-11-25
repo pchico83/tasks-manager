@@ -11,7 +11,8 @@ mongo =  PyMongo(app, uri, tls=True, tlsCAFile='/etc/ca-clients/mongodb-ca-cert'
 
 @app.route('/')
 def tasks_list():
-    tasks = mongo.db.tasks.find()
+    tasks = list(mongo.db.tasks.find())
+    # tasks = tasks[:-1]
     return render_template('list.html', tasks=tasks)
 
 
@@ -49,5 +50,5 @@ def resolve_task(task_id):
 
 
 if __name__ == '__main__':
-    debug = os.getenv('DEBUG') == "True"
+    debug  = os.getenv('DEBUG') == "True"
     app.run(host='0.0.0.0', port='8080', debug=debug)

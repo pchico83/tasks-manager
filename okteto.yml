@@ -1,4 +1,4 @@
-name: tasks
+name: api
 command: bash
 environment:
   - DEBUG=True
