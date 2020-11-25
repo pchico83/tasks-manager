@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    {{- include "movies.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: api
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: api
+          image: {{ .Values.api.image }}:{{ .Values.tag }}
+          env:
+          - name: DB_HOST
+            value: mongo-mongodb-headless
+          - name: DB_NAME
+            value: db
+          - name: DB_USER
+            value: mongo
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-mongodb
+                key: mongodb-password
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /
+              port: 8080
+          readinessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /
+              port: 8080
+          volumeMounts:
+            - name: ca-clients
+              mountPath: "/etc/ca-clients"
+              readOnly: true

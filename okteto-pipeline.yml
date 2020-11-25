@@ -1,4 +1,6 @@
+icon: https://github.com/okteto/tasks-manager/raw/master/icon.png
 deploy:
 - helm repo add bitnami https://charts.bitnami.com/bitnami
-- helm upgrade --install mongo bitnami/mongodb --set architecture=replicaset,tls.enabled=true,auth.rootPassword=rootpasswd,auth.password=secretpassword,auth.username=mongo,auth.database=db
-- kubectl apply -f k8s.yaml
+- helm upgrade --install mongo bitnami/mongodb --set architecture=replicaset,tls.enabled=true,auth.username=mongo,auth.database=db,auth.rootPassword=${MONGODB_PASSWORD},auth.password=${MONGODB_PASSWORD}
+- okteto build -t okteto.dev/tasks:${OKTETO_GIT_COMMIT} .
+- helm upgrade --install tasks chart --set tag=${OKTETO_GIT_COMMIT}

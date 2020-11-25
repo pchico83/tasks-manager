@@ -1,9 +1,10 @@
 name: tasks
-image: okteto/python:3
 command: bash
-volumes:
-- /root/.cache/pip
+environment:
+  - DEBUG=True
 sync:
-- .:/usr/src/app
-reverse:
-- 9000:9000
+  - .:/usr/src/app
+forward:
+  - 5678:5678
+persistentVolume:
+  enabled: false
